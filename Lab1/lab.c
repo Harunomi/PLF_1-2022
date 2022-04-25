@@ -4,6 +4,10 @@
 
 void revisarEntradas(int totalEntradas,char *argv[]);
 
+void revisarNumeroEntero(char string[], FILE *archivoSalida);
+
+void revisarNumeroReal(char entrada[], FILE *archivoSalida);
+
 int main(int argc,char *argv[]){
     //revisarEntradas(argc-1,argv);
     char stringEntrada[20];
@@ -22,25 +26,27 @@ int main(int argc,char *argv[]){
     //FILE *archivoEntrada = fopen(stringEntrada, "r");
     //FILE *archivoSalida = fopen(stringSalida,"w");
     FILE *archivoEntrada = fopen("archivo_entrada.txt", "r");
+    FILE *archivoSalida = fopen("archivo_salida.txt", "w");
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     while(!feof(archivoEntrada)){
         pedacito = strtok(fila,separacion);
-        printf("%s\n",pedacito);
         while (pedacito !='\0'){
+            revisarNumeroEntero(pedacito,archivoSalida);
+            revisarNumeroReal(pedacito,archivoSalida);
             pedacito = strtok(NULL, separacion);
-            printf("%s\n",pedacito);        
         }
         fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     }
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     pedacito = strtok(fila,separacion);
-    printf("%s\n",pedacito);
     while (pedacito !='\0'){
-        pedacito = strtok(NULL, separacion);
-        printf("%s\n",pedacito);        
-    }
+        revisarNumeroEntero(pedacito,archivoSalida);
+        revisarNumeroReal(pedacito,archivoSalida);
+        pedacito = strtok(NULL, separacion);   
    
-    
+    }
+    fclose(archivoEntrada);
+    fclose(archivoSalida);
 
     return 0;
 }
@@ -84,7 +90,77 @@ void revisarEntradas(int totalEntradas,char *argv[]){
         // caso de no haber errores, cerramos los archivos
         fclose(archivoEntrada);
         fclose(archivoSalida);
-
     }
+}
 
+void revisarNumeroEntero(char entrada[], FILE *archivoSalida){
+    int i = 0;
+    char string[100];
+    strcpy(string,entrada); // se copia entrada en string, puesto que entrada viene con datos basura al usar strtok, como el (null) y con eso lo eliminamos.
+    while (string[i] != '\0'){
+        if(string[i] == '1' ||
+        string[i] == '2'||
+        string[i] == '3'||
+        string[i] == '4'||
+        string[i] == '5'||
+        string[i] == '6'||
+        string[i] == '7'||
+        string[i] == '8'||
+        string[i] == '9'||
+        string[i] == '0'){
+        }else{
+            // caso en que se encuentre algo distinto a digitos
+            return;
+        }
+        i = i + 1;
+        
+    }
+    // en caso que haya solo digitos
+    fprintf(archivoSalida,"NUM_ENTERO\n");
+}
+
+void revisarNumeroReal(char entrada[], FILE *archivoSalida){
+    int i = 0;
+    int contador = 0; 
+    char string[100];
+    char separacion[2] = ".";
+    char *pedacito;
+    strcpy(string,entrada);
+    while (string[i] != '\0'){
+        if(string[i] == '1' ||
+        string[i] == '2'||
+        string[i] == '3'||
+        string[i] == '4'||
+        string[i] == '5'||
+        string[i] == '6'||
+        string[i] == '7'||
+        string[i] == '8'||
+        string[i] == '9'||
+        string[i] == '0' ||
+        string[i] == '.'){
+            // contamos la cantidad de puntos ('.') del string
+            if (string[i] == '.'){
+                contador++;
+            }
+        }else{
+            // caso en que haya cualquier cosa que no sean numeros o puntos
+            return;
+        }
+        i = i + 1;
+        
+    }
+    // si la cantidad de puntos es 1
+    if (contador == 1){
+        pedacito = strtok(string,separacion);
+        pedacito = strtok(NULL, separacion);
+        if(pedacito == '\0'){
+            return;
+        }
+        if(atoi(pedacito) == 0){
+            fprintf(archivoSalida,"NUM_ENTERO\n");    
+            return;
+        }
+        fprintf(archivoSalida,"NUM_REAL\n");
+    }
+    
 }
