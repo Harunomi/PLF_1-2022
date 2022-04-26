@@ -4,9 +4,11 @@
 
 void revisarEntradas(int totalEntradas,char *argv[]);
 
-void revisarNumeroEntero(char string[], FILE *archivoSalida);
+void revisarNumeroEntero(char entrada[], FILE *archivoSalida);
 
 void revisarNumeroReal(char entrada[], FILE *archivoSalida);
+
+void revisarPalabrasReservadas(char entrada[], FILE *archivoSalida);
 
 int main(int argc,char *argv[]){
     //revisarEntradas(argc-1,argv);
@@ -15,7 +17,6 @@ int main(int argc,char *argv[]){
     char fila[1000];
     char *pedacito;
     char separacion[2] = " ";
-    int salida = 0;
     /*
     strcpy(stringEntrada,argv[1]);
     strcat(stringEntrada,".txt");
@@ -28,40 +29,53 @@ int main(int argc,char *argv[]){
     FILE *archivoEntrada = fopen("archivo_entrada.txt", "r");
     FILE *archivoSalida = fopen("archivo_salida.txt", "w");
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
+    // CICLO HASTA QUE SE LLEGUE A LA PENULTIMA FILA DEL ARCHIVO
     while(!feof(archivoEntrada)){
+        // tomo el primer elemento de la fila separado por un espacio 
         pedacito = strtok(fila,separacion);
-        while (pedacito !='\0'){
+        while (pedacito !='\0'){ // leo ese elemento hasta el final de la fila
+            // hago las revisiones
             revisarNumeroEntero(pedacito,archivoSalida);
             revisarNumeroReal(pedacito,archivoSalida);
+            printf("%s\n",pedacito);
+            // paso el asiguente elemento
             pedacito = strtok(NULL, separacion);
+            
         }
+        // paso a la siguiente fila
         fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     }
+
+    // repito los pasos anteriores para la ultima fila
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
+
     pedacito = strtok(fila,separacion);
     while (pedacito !='\0'){
         revisarNumeroEntero(pedacito,archivoSalida);
         revisarNumeroReal(pedacito,archivoSalida);
+        printf("%s\n",pedacito);
         pedacito = strtok(NULL, separacion);   
-   
-    }
+    }/*
+    char separacion2[2] = "(";
+    pedacito = strtok(fila,separacion2);
+    printf("%s",fila);
     fclose(archivoEntrada);
     fclose(archivoSalida);
-
+*/
     return 0;
 }
 
 void revisarEntradas(int totalEntradas,char *argv[]){
     if(totalEntradas == 0 ){
-        printf("Error: Faltan par%cmetros.\n",160);
+        printf("Error: Faltan par%cmetros.\n", 160 );
         printf("Uso: lexico.exe archivo_entrada archivo_salida");
         exit(1);
-    }else if(totalEntradas == 1){
-        printf("Error: Falta par%cmetro.\n",160);
+    }else if(totalEntradas == 1 ){
+        printf("Error: Falta par%cmetro.\n", 160 );
         printf("Uso: lexico.exe archivo_entrada archivo_salida");
         exit(1);
-    }else if(totalEntradas > 2){
-        printf("Error: Demasiados par%cmetros.\n",160);
+    }else if(totalEntradas > 2 ){
+        printf("Error: Demasiados par%cmetros.\n", 160 );
         printf("Uso: lexico.exe archivo_entrada archivo_salida");
         exit(1);
     }else{ // revisamos que los archivos de salida sean correctos
@@ -95,7 +109,7 @@ void revisarEntradas(int totalEntradas,char *argv[]){
 
 void revisarNumeroEntero(char entrada[], FILE *archivoSalida){
     int i = 0;
-    char string[100];
+    char string[1000];
     strcpy(string,entrada); // se copia entrada en string, puesto que entrada viene con datos basura al usar strtok, como el (null) y con eso lo eliminamos.
     while (string[i] != '\0'){
         if(string[i] == '1' ||
@@ -150,7 +164,7 @@ void revisarNumeroReal(char entrada[], FILE *archivoSalida){
         
     }
     // si la cantidad de puntos es 1
-    if (contador == 1){
+    if (contador == 1 ){
         pedacito = strtok(string,separacion);
         pedacito = strtok(NULL, separacion);
         if(pedacito == '\0'){
@@ -163,4 +177,10 @@ void revisarNumeroReal(char entrada[], FILE *archivoSalida){
         fprintf(archivoSalida,"NUM_REAL\n");
     }
     
+}
+
+void revisarPalabrasReservadas(char entrada[], FILE *archivoSalida){
+    char string[1000];
+    strcpy(string,entrada); // se copia entrada en string, puesto que entrada viene con datos basura al usar strtok, como el (null) y con eso lo eliminamos.
+
 }
