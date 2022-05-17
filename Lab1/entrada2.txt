@@ -1,0 +1,13 @@
+suma +
+resta -
+multiplicacion *
+division /
+potencia ^
+modulo %
+funcion raiz sqrt
+abrir parentesis (
+cerrar parentesis )
+numero entero 100
+numero real -4.1
+no es un numero real, es entero 4.0
+no es un numero -5.

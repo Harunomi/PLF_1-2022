@@ -2,32 +2,41 @@
 #include <stdlib.h>
 #include <string.h>
 
+// Entradas: un entero con el total de entradas del argv y las entradas del argv
+// Salidas: ninguna
+// Descripcion: verifica que las entradas por consola sean correctas
 void revisarEntradas(int totalEntradas,char *argv[]);
 
+// Entradas: un arreglo de caracteres y un archivo tipo FILE
+// Salidas: ninguna
+// Descripcion: verifica que el arreglo de entrada corresponda a un numero entero
 void revisarNumeroEntero(char entrada[], FILE *archivoSalida);
 
+// Entradas: un arreglo de caracteres y un archivo tipo FILE
+// Salidas: ninguna
+// Descripcion: verifica que el arreglo de entrada corresponda a un numero real
 void revisarNumeroReal(char entrada[], FILE *archivoSalida);
 
+// Entradas: un arreglo de caracteres y un archivo tipo FILE
+// Salidas: ninguna
+// Descripcion: verifica que el arreglo de entrada corresponda a corresponda a un simbolo terminal
 void revisarPalabrasReservadas(char entrada[], FILE *archivoSalida);
 
 int main(int argc,char *argv[]){
-    //revisarEntradas(argc-1,argv);
+    revisarEntradas(argc-1,argv);
     char stringEntrada[20];
     char stringSalida[20];
     char fila[1000];
     char *pedacito;
     char separacion[2] = " ";
-    /*
+    
     strcpy(stringEntrada,argv[1]);
     strcat(stringEntrada,".txt");
     strcpy(stringSalida,argv[2]);
     strcat(stringSalida,".txt");
-    */
     // creamos los archivos 
-    //FILE *archivoEntrada = fopen(stringEntrada, "r");
-    //FILE *archivoSalida = fopen(stringSalida,"w");
-    FILE *archivoEntrada = fopen("archivo_entrada.txt", "r");
-    FILE *archivoSalida = fopen("archivo_salida.txt", "w");
+    FILE *archivoEntrada = fopen(stringEntrada, "r");
+    FILE *archivoSalida = fopen(stringSalida,"w");
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     // CICLO HASTA QUE SE LLEGUE A LA PENULTIMA FILA DEL ARCHIVO
     while(!feof(archivoEntrada)){
@@ -37,7 +46,7 @@ int main(int argc,char *argv[]){
             // hago las revisiones
             revisarNumeroEntero(pedacito,archivoSalida);
             revisarNumeroReal(pedacito,archivoSalida);
-            printf("%s\n",pedacito);
+            revisarPalabrasReservadas(pedacito,archivoSalida);
             // paso el asiguente elemento
             pedacito = strtok(NULL, separacion);
             
@@ -45,7 +54,7 @@ int main(int argc,char *argv[]){
         // paso a la siguiente fila
         fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
     }
-
+    
     // repito los pasos anteriores para la ultima fila
     fscanf(archivoEntrada," %[^\n]",fila); // leo TODA la fila
 
@@ -53,15 +62,12 @@ int main(int argc,char *argv[]){
     while (pedacito !='\0'){
         revisarNumeroEntero(pedacito,archivoSalida);
         revisarNumeroReal(pedacito,archivoSalida);
-        printf("%s\n",pedacito);
+        revisarPalabrasReservadas(pedacito,archivoSalida);
         pedacito = strtok(NULL, separacion);   
-    }/*
-    char separacion2[2] = "(";
-    pedacito = strtok(fila,separacion2);
-    printf("%s",fila);
+    }
+    // cerramos los archivos
     fclose(archivoEntrada);
     fclose(archivoSalida);
-*/
     return 0;
 }
 
@@ -110,6 +116,7 @@ void revisarEntradas(int totalEntradas,char *argv[]){
 void revisarNumeroEntero(char entrada[], FILE *archivoSalida){
     int i = 0;
     char string[1000];
+    int contadorMenos = 0;
     strcpy(string,entrada); // se copia entrada en string, puesto que entrada viene con datos basura al usar strtok, como el (null) y con eso lo eliminamos.
     while (string[i] != '\0'){
         if(string[i] == '1' ||
@@ -121,21 +128,29 @@ void revisarNumeroEntero(char entrada[], FILE *archivoSalida){
         string[i] == '7'||
         string[i] == '8'||
         string[i] == '9'||
+        string[i] == '9'||
+        string[i] == '-'||
         string[i] == '0'){
+            if (string[i] == '-'){
+                contadorMenos++;
+            }
         }else{
             // caso en que se encuentre algo distinto a digitos
-            return;
+             return;
         }
         i = i + 1;
-        
     }
     // en caso que haya solo digitos
-    fprintf(archivoSalida,"NUM_ENTERO\n");
+    if(contadorMenos == 0){
+        fprintf(archivoSalida,"NUM_ENTERO\n");
+    }else if(contadorMenos == 1 && string[0] == '-' && i > 1){
+        fprintf(archivoSalida,"NUM_ENTERO\n");
+    }
 }
-
 void revisarNumeroReal(char entrada[], FILE *archivoSalida){
     int i = 0;
     int contador = 0; 
+    int contadorMenos = 0;
     char string[100];
     char separacion[2] = ".";
     char *pedacito;
@@ -151,10 +166,14 @@ void revisarNumeroReal(char entrada[], FILE *archivoSalida){
         string[i] == '8'||
         string[i] == '9'||
         string[i] == '0' ||
+        string[i] == '-' ||
         string[i] == '.'){
             // contamos la cantidad de puntos ('.') del string
             if (string[i] == '.'){
                 contador++;
+            }
+            if (string[i] == '-'){
+                contadorMenos++;
             }
         }else{
             // caso en que haya cualquier cosa que no sean numeros o puntos
@@ -171,16 +190,44 @@ void revisarNumeroReal(char entrada[], FILE *archivoSalida){
             return;
         }
         if(atoi(pedacito) == 0){
-            fprintf(archivoSalida,"NUM_ENTERO\n");    
+            if(contadorMenos == 0){
+                fprintf(archivoSalida,"NUM_ENTERO\n");
+            }else if(contadorMenos == 1 && string[0] == '-' && i>1){
+                fprintf(archivoSalida,"NUM_ENTERO\n");
+            }    
             return;
         }
-        fprintf(archivoSalida,"NUM_REAL\n");
+        if (contadorMenos == 0){
+            fprintf(archivoSalida,"NUM_REAL\n");
+        }else if (contadorMenos == 1 && string[0] == '-' && i>1){
+            fprintf(archivoSalida,"NUM_REAL\n");
+        }
+        
     }
     
 }
 
 void revisarPalabrasReservadas(char entrada[], FILE *archivoSalida){
     char string[1000];
+    char modulo[2] = "%";
     strcpy(string,entrada); // se copia entrada en string, puesto que entrada viene con datos basura al usar strtok, como el (null) y con eso lo eliminamos.
-
+    if (strcmp(string,"+") == 0){
+        fprintf(archivoSalida,"+\n");
+    }else if (strcmp(string,"-") == 0){
+        fprintf(archivoSalida,"-\n");
+    }else if (strcmp(string,"*") == 0){
+        fprintf(archivoSalida,"*\n");
+    }else if (strcmp(string,"/") == 0){
+        fprintf(archivoSalida,"/\n");
+    }else if (strcmp(string,"^") == 0){
+        fprintf(archivoSalida,"^\n");
+    }else if (strcmp(string, modulo) == 0){
+        fprintf(archivoSalida,"%s\n",modulo);
+    }else if (strcmp(string,"sqrt") == 0){
+        fprintf(archivoSalida, "sqrt\n");
+    }else if (strcmp(string,"(") == 0){
+        fprintf(archivoSalida, "(\n");
+    }else if (strcmp(string,")") == 0){
+        fprintf(archivoSalida, ")\n");
+    }
 }
