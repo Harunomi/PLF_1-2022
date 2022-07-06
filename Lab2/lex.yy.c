@@ -290,9 +290,9 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 static yyconst short int yy_accept[34] =
     {   0,
         0,    0,   22,   19,   20,    8,    6,    7,    5,    2,
-        3,   19,    4,   15,    1,   19,   14,   13,    0,   15,
-        0,    0,   11,    0,   12,    0,   17,    0,   10,   16,
-       18,    9,    0
+        3,   19,    4,   16,    1,   19,   15,   14,    0,   16,
+        0,    0,   12,    0,   13,    0,   18,    0,   10,   17,
+       11,    9,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -688,7 +688,7 @@ YY_RULE_SETUP
 case 14:
 YY_RULE_SETUP
 #line 21 "Lab2.l"
-{fprintf(yyout,"NUM_ENTERO\n");}
+{fprintf(yyout,"NUM_REAL\n");}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
@@ -708,7 +708,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 25 "Lab2.l"
-{fprintf(yyout,"NUM_REAL\n");}
+{fprintf(yyout,"NUM_ENTERO\n");}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP

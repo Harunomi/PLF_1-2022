@@ -1,0 +1,13 @@
++
+-
+*
+/
+^
+%
+SQRT
+(
+)
+NUM_ENTERO
+NUM_REAL
+NUM_REAL
+NUM_REAL

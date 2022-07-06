@@ -290,8 +290,8 @@ static void yy_fatal_error YY_PROTO(( yyconst char msg[] ));
 static yyconst short int yy_accept[26] =
     {   0,
         0,    0,   17,   15,   14,    8,    6,    7,    5,    2,
-        3,    4,   13,    1,   15,   12,    0,   13,    0,    0,
-       10,    0,   11,    9,    0
+        3,    4,   13,    1,   15,   11,    0,   13,    0,    0,
+       12,    0,   10,    9,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -663,17 +663,17 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 20 "lexico.l"
-{yylval.real=atof(yytext); return NUM_REAL;}
+{yylval.real=atof(yytext); return REAL_NEG;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
 #line 21 "lexico.l"
-{yylval.real=atof(yytext); return REAL_NEG;}
+{yylval.entero=atoi(yytext); return ENTERO_NEG;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
 #line 22 "lexico.l"
-{yylval.entero=atoi(yytext); return ENTERO_NEG;}
+{yylval.real=atof(yytext); return NUM_REAL;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP

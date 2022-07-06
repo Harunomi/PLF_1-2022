@@ -23,10 +23,10 @@ void yyerror(char *s);
 %left '^'
 %left SQRT
 %left '(' ')'
-%start sprima
+%start s
 
 %%
-sprima: n  { }
+s: n  { }
     | ERROR {yyerror("a");}
 ;
 n: calculo_real {printf("\n%f\n",$1); return 1;}
