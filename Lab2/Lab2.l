@@ -15,14 +15,14 @@
 "%" {fprintf(yyout,"%c\n",37);}
 "sqrt" {fprintf(yyout,"SQRT\n");}
 "-"[0-9]+"."[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
-[0-9]+"^""-"[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
 "-"[0-9]+"." {fprintf(yyout,"NUM_REAL\n");}
 [0-9]+"."[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
 "."[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
 "-"[0-9]+ {fprintf(yyout,"NUM_ENTERO\n");}
 [0-9]+ {fprintf(yyout,"NUM_ENTERO\n");}
-"-"[0-9]+"^"[0-9]+ {fprintf(yyout,"NUM_ENTERO\n");}
-[0-9]+"^"[0-9]+ {fprintf(yyout,"NUM_ENTERO\n");}
+"-"[0-9]+"e"[0-9]+ {fprintf(yyout,"NUM_ENTERO\n");}
+[0-9]+"e"[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
+[0-9]+"e""-"[0-9]+ {fprintf(yyout,"NUM_REAL\n");}
 . {}
 "\n" {}
 %%
